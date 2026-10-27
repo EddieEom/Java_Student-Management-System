@@ -1,0 +1,16 @@
+target/
+build/
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+.env
+.env.*
+!.env.example
+*.log
+*.zip
+.DS_Store

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>과정 등록/수정 | Campus</title><link rel="stylesheet" href="../static/css/course.css" th:href="@{/css/course.css}"></head>
+<body><div class="layout"><aside class="sidebar">
+<a class="logo" href="courses.html" th:href="@{/courses}" aria-label="Campus 홈">Campus<b>.</b></a>
+<div><p class="side-caption">WORKSPACE</p><nav class="nav" aria-label="주 메뉴">
+<a class="nav-link" href="students.html" th:href="@{/students}"><span aria-hidden="true" class="nav-symbol">▦</span> 학생 관리</a>
+<a class="nav-link active" href="courses.html" th:href="@{/courses}"><span aria-hidden="true" class="nav-symbol">▤</span> 과정 관리</a>
+<a class="nav-link" href="course-form.html" th:href="@{/courses/new}"><span aria-hidden="true" class="nav-symbol">＋</span> 과정 등록</a>
+</nav></div><div class="side-tip"><strong>JAVA BACKEND · DAY 4</strong>Course 관리 도전과제<br>검색 · 정렬 · 페이징 · Dirty Checking</div></aside>
+<div class="workspace"><header class="topbar"><div class="crumb">학사 관리 / <b>과정 입력</b></div><div class="profile"><span class="profile-bubble">C</span><span>Course Management</span></div></header>
+<main class="main"><section class="page-header"><div><p class="eyebrow">COURSE MANAGEMENT</p><h1 th:text="${editing} ? '과정 정보 수정' : '새 과정 등록'">새 과정 등록</h1><p>과정명과 담당교수를 입력해 주세요.</p></div><a class="btn" href="courses.html" th:href="@{/courses}">목록으로</a></section>
+<div class="content-columns"><section class="card"><header class="card-header"><div><h2>기본 정보</h2><p>필수 항목을 확인한 후 저장해 주세요.</p></div><span class="pill">필수 입력</span></header>
+<form action="courses.html" th:action="${editing} ? @{/courses/{id}/edit(id=${course.id})} : @{/courses}" th:object="${course}" method="post">
+<div class="form-body"><div class="field"><label for="name">과정명 *</label><input id="name" type="text" th:field="*{name}" name="name" maxlength="100" placeholder="예: Java Backend 실습" required aria-describedby="nameHelp"><small id="nameHelp">최대 100자</small><span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">과정명을 확인하세요.</span></div>
+<div class="field"><label for="teacher">담당교수 *</label><input id="teacher" type="text" th:field="*{teacher}" name="teacher" maxlength="100" placeholder="예: 주동현" required><span class="error" th:if="${#fields.hasErrors('teacher')}" th:errors="*{teacher}">담당교수를 확인하세요.</span></div></div>
+<div class="form-actions"><a class="btn" href="courses.html" th:href="@{/courses}">취소</a><button type="submit" class="btn primary" th:text="${editing} ? '수정 내용 저장' : '과정 등록하기'">과정 등록하기</button></div></form></section><aside class="aside"><h2>입력 안내</h2><p>등록된 과정은 데이터베이스의 <code>course</code> 테이블에 저장됩니다.</p><ul><li>과정명과 담당교수를 모두 입력합니다.</li><li>수정은 JPA Dirty Checking으로 반영됩니다.</li><li>검색 및 정렬은 과정 목록에서 이용합니다.</li></ul></aside></div><footer class="footnote"><span>Campus · Course Management</span><span>Spring Boot · JPA · SQL Server</span></footer></main></div></div>
+<script>if(location.protocol==='file:'){document.querySelectorAll('form[method="post"]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();alert('레이아웃 미리보기입니다. DB 작업은 Spring 서버에서 실행해 주세요.')}));}document.querySelectorAll('[data-delete]').forEach(f=>f.addEventListener('submit',e=>{if(!confirm('이 과정을 삭제하시겠습니까?'))e.preventDefault();}));</script></body></html>

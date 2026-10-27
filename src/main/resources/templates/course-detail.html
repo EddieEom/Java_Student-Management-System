@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>과정 상세 | Campus</title><link rel="stylesheet" href="../static/css/course.css" th:href="@{/css/course.css}"></head>
+<body><div class="layout"><aside class="sidebar">
+<a class="logo" href="courses.html" th:href="@{/courses}" aria-label="Campus 홈">Campus<b>.</b></a>
+<div><p class="side-caption">WORKSPACE</p><nav class="nav" aria-label="주 메뉴">
+<a class="nav-link" href="students.html" th:href="@{/students}"><span aria-hidden="true" class="nav-symbol">▦</span> 학생 관리</a>
+<a class="nav-link active" href="courses.html" th:href="@{/courses}"><span aria-hidden="true" class="nav-symbol">▤</span> 과정 관리</a>
+<a class="nav-link" href="course-form.html" th:href="@{/courses/new}"><span aria-hidden="true" class="nav-symbol">＋</span> 과정 등록</a>
+</nav></div><div class="side-tip"><strong>JAVA BACKEND · DAY 4</strong>Course 관리 도전과제<br>검색 · 정렬 · 페이징 · Dirty Checking</div></aside>
+<div class="workspace"><header class="topbar"><div class="crumb">학사 관리 / <b>과정 상세</b></div><div class="profile"><span class="profile-bubble">C</span><span>Course Management</span></div></header>
+<main class="main"><section class="page-header"><div><p class="eyebrow">COURSE MANAGEMENT</p><h1>과정 상세정보</h1><p>저장된 과정 정보를 확인합니다.</p></div><a class="btn" href="courses.html" th:href="@{/courses}">목록으로</a></section>
+<div class="content-columns"><section class="card"><header class="card-header"><div><h2 th:text="${course.name}">Java Backend 기초</h2><p>COURSE PROFILE</p></div><span class="pill" th:text="|ID ${course.id}|">ID 1</span></header><div class="detail-body"><dl><div class="detail-row"><dt>과정 ID</dt><dd th:text="${course.id}">1</dd></div><div class="detail-row"><dt>과정명</dt><dd th:text="${course.name}">Java Backend 기초</dd></div><div class="detail-row"><dt>담당교수</dt><dd th:text="${course.teacher}">주동현</dd></div></dl></div><div class="form-actions"><form data-delete th:action="@{/courses/{id}/delete(id=${course.id})}" action="courses.html" method="post"><button class="btn danger" type="submit">과정 삭제</button></form><a class="btn primary" href="course-form.html" th:href="@{/courses/{id}/edit(id=${course.id})}">과정 수정</a></div></section>
+<aside class="aside"><h2>안내</h2><p>과정 정보 변경은 Service 트랜잭션 안에서 처리됩니다.</p><p>삭제 버튼은 되돌릴 수 없는 작업입니다.</p></aside></div><footer class="footnote"><span>Campus · Course Management</span><span>Spring Boot · JPA · SQL Server</span></footer></main></div></div>
+<script>if(location.protocol==='file:'){document.querySelectorAll('form[method="post"]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();alert('레이아웃 미리보기입니다. DB 작업은 Spring 서버에서 실행해 주세요.')}));}document.querySelectorAll('[data-delete]').forEach(f=>f.addEventListener('submit',e=>{if(!confirm('이 과정을 삭제하시겠습니까?'))e.preventDefault();}));</script></body></html>
