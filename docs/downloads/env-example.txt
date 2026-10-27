@@ -1,0 +1,4 @@
+# Copy these names into your OS environment; do not commit a real .env file.
+DB_URL=jdbc:sqlserver://localhost:1433;databaseName=BackendIntroDB;encrypt=true;trustServerCertificate=true;
+DB_USERNAME=YOUR_SQL_SERVER_USERNAME
+DB_PASSWORD=YOUR_SQL_SERVER_PASSWORD

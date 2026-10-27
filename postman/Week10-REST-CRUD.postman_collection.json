@@ -1,0 +1,796 @@
+{
+  "info": {
+    "name": "Week10 REST CRUD - Student & Course",
+    "description": "10주차 PDF 실습 0~7 + Course REST 도전과제. 두 폴더 모두 01→07 순서대로 실행하며 01 생성 ID가 자동 저장됩니다. SQL Server 접속 필요.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 Course REST 도전과제",
+      "item": [
+        {
+          "name": "01 POST 생성 · 201 + id",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"자바 백엔드 종합실습\",\n  \"teacher\": \"주동현\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "const course = pm.response.json();",
+                  "pm.test(\"Course ID 생성\", () => pm.expect(course.id).to.be.a(\"number\"));",
+                  "pm.collectionVariables.set(\"courseId\", course.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 GET 상세 · 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const course = pm.response.json();",
+                  "pm.test(\"생성한 Course 조회\", () => pm.expect(course.name).to.eql(\"자바 백엔드 종합실습\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 PUT 수정 · 200",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "{{courseId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"자바 REST API 종합실습\",\n  \"teacher\": \"주동현 교수\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const course = pm.response.json();",
+                  "pm.test(\"수정된 필드 응답\", () => pm.expect(course.name).to.eql(\"자바 REST API 종합실습\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 POST 잘못된 입력 · 400 필드별 오류",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"teacher\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "const errors = pm.response.json();",
+                  "pm.test(\"필드별 JSON\", () => { pm.expect(errors).to.have.property(\"name\"); pm.expect(errors).to.have.property(\"teacher\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 GET 검색·정렬·페이징 · 200 Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses?nameKeyword=REST&teacherKeyword=주동현&sortField=name&sortDir=desc&page=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ],
+              "query": [
+                {
+                  "key": "nameKeyword",
+                  "value": "REST"
+                },
+                {
+                  "key": "teacherKeyword",
+                  "value": "주동현"
+                },
+                {
+                  "key": "sortField",
+                  "value": "name"
+                },
+                {
+                  "key": "sortDir",
+                  "value": "desc"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const page = pm.response.json();",
+                  "pm.test(\"Page 응답\", () => {pm.expect(page).to.have.property(\"content\");pm.expect(page).to.have.property(\"totalPages\");pm.expect(page.content).to.be.an(\"array\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 DELETE 삭제 · 204 Body 없음",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+                  "pm.test(\"Body 없음\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 GET 삭제 ID 재조회 · 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "추가 A PUT 잘못된 입력 · 400",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "{{courseId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"teacher\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "const errors = pm.response.json();",
+                  "pm.test(\"PUT도 검증\", () => {pm.expect(errors).to.have.property(\"name\");pm.expect(errors).to.have.property(\"teacher\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "추가 B GET 없는 ID · 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/9223372036854775807",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "9223372036854775807"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "추가 C PUT 없는 ID · 404",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/9223372036854775807",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "9223372036854775807"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"과정\",\n  \"teacher\": \"교수\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "추가 D DELETE 없는 ID · 404",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/9223372036854775807",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "9223372036854775807"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Student REST 실습 검증",
+      "item": [
+        {
+          "name": "01 POST 생성 · 201 + id",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"종합실습학생\",\n  \"major\": \"소프트웨어융합과\",\n  \"grade\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "const student = pm.response.json();",
+                  "pm.test(\"Student ID 생성\", () => pm.expect(student.id).to.be.a(\"number\"));",
+                  "pm.collectionVariables.set(\"studentId\", student.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 GET 상세 · 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students",
+                "{{studentId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 PUT 수정 · 200",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students",
+                "{{studentId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"종합실습학생수정\",\n  \"major\": \"AI소프트웨어과\",\n  \"grade\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const student = pm.response.json();",
+                  "pm.test(\"Student 수정 결과\", () => pm.expect(student.grade).to.eql(2));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 POST 잘못된 입력 · 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"major\": \"\",\n  \"grade\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "const errors = pm.response.json();",
+                  "pm.test(\"name, major, grade 오류\", () => { [\"name\",\"major\",\"grade\"].forEach(key => pm.expect(errors).to.have.property(key));});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 GET 검색·정렬·페이징 · 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students?nameKeyword=종합실습&majorKeyword=AI소프트웨어&sortField=name&sortDir=desc&page=0&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students"
+              ],
+              "query": [
+                {
+                  "key": "nameKeyword",
+                  "value": "종합실습"
+                },
+                {
+                  "key": "majorKeyword",
+                  "value": "AI소프트웨어"
+                },
+                {
+                  "key": "sortField",
+                  "value": "name"
+                },
+                {
+                  "key": "sortDir",
+                  "value": "desc"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const page = pm.response.json();",
+                  "pm.test(\"Page 구조\", () => {pm.expect(page).to.have.property(\"content\");pm.expect(page).to.have.property(\"totalPages\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 DELETE · 204",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students",
+                "{{studentId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 GET 삭제 ID 재조회 · 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students",
+                "{{studentId}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "추가 A PUT 잘못된 입력 · 400",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "students",
+                "{{studentId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"major\": \"\",\n  \"grade\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "const errors = pm.response.json();",
+                  "pm.test(\"PUT도 검증\", () => pm.expect(errors).to.have.property(\"grade\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "courseId",
+      "value": ""
+    },
+    {
+      "key": "studentId",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "passed": 32,
+  "total": 32,
+  "results": [
+    {
+      "test": "Course 01 create",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course 02 get detail",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course 03 put update",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course 04 validation POST",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "test": "Course 05 search sort paging",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course 06 delete",
+      "status": 204,
+      "expected": 204,
+      "pass": true
+    },
+    {
+      "test": "Course 07 deleted 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "test": "Course missing PUT 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "test": "Course missing DELETE 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "test": "Course validation PUT",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 1",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 2",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 3",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 4",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 5",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 6",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 7",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course pagination fixture 8",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Course 2nd page 5-size",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course name filter",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course teacher filter",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Course AND filter",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Student 01 create",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Student 02 get detail",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Student 03 put update",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Student 04 validation POST",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "test": "Student 05 search sort paging",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Student 06 delete",
+      "status": 204,
+      "expected": 204,
+      "pass": true
+    },
+    {
+      "test": "Student 07 deleted 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "test": "Student validation PUT",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "test": "Student missing PUT 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "test": "Student missing DELETE 404",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    }
+  ]
+}
