@@ -430,6 +430,21 @@
                 font-size: 12px;
                 color: var(--blue);
             }
+
+            .row-actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .row-actions form {
+                margin: 0;
+            }
+
+            .row-actions .btn {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
             
             .table-foot {
                 padding: 17px 26px;
@@ -1064,6 +1079,9 @@
                                         <th scope="col">
                                             상세
                                         </th>
+                                        <th scope="col">
+                                            관리
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1115,6 +1133,19 @@
                                                     <path d="M5 12h14m-5-5 5 5-5 5"/>
                                                 </svg>
                                             </a>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <a class="btn" href="student-edit.html"
+                                                   th:href="@{/students/{id}/edit(id=${student.id})}"
+                                                   th:aria-label="|${student.name} 학생 수정|">수정</a>
+                                                <form method="post"
+                                                      th:action="@{/students/{id}/delete(id=${student.id})}"
+                                                      onsubmit="return confirm('이 학생을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.');">
+                                                    <button class="btn danger" type="submit"
+                                                            th:aria-label="|${student.name} 학생 삭제|">삭제</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
