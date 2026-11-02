@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class CourseService {
+
     private static final int PAGE_SIZE = 5;
     private final CourseRepository courseRepository;
 
@@ -47,8 +48,13 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Course> search(String nameKeyword, String teacherKeyword,
-                               String sortField, String sortDir, int page) {
+    public Page<Course> search(
+        String nameKeyword,
+        String teacherKeyword,
+        String sortField,
+        String sortDir,
+        int page
+    ) {
         boolean nameEmpty = nameKeyword == null || nameKeyword.isBlank();
         boolean teacherEmpty = teacherKeyword == null || teacherKeyword.isBlank();
 
@@ -59,9 +65,9 @@ public class CourseService {
             default -> "id";
         };
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDir)
-                ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(Math.max(0, page), PAGE_SIZE,
-                Sort.by(direction, field));
+            ? Sort.Direction.DESC
+            : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(Math.max(0, page), PAGE_SIZE, Sort.by(direction, field));
 
         if (nameEmpty && teacherEmpty) {
             return courseRepository.findAll(pageable);
@@ -73,6 +79,9 @@ public class CourseService {
             return courseRepository.findByTeacherContaining(teacherKeyword, pageable);
         }
         return courseRepository.findByNameContainingAndTeacherContaining(
-                nameKeyword, teacherKeyword, pageable);
+            nameKeyword,
+            teacherKeyword,
+            pageable
+        );
     }
 }

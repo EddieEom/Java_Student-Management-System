@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CourseController {
+
     private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
@@ -23,14 +24,21 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public String courses(@RequestParam(required = false) String nameKeyword,
-                          @RequestParam(required = false) String teacherKeyword,
-                          @RequestParam(defaultValue = "id") String sortField,
-                          @RequestParam(defaultValue = "asc") String sortDir,
-                          @RequestParam(defaultValue = "0") int page,
-                          Model model) {
+    public String courses(
+        @RequestParam(required = false) String nameKeyword,
+        @RequestParam(required = false) String teacherKeyword,
+        @RequestParam(defaultValue = "id") String sortField,
+        @RequestParam(defaultValue = "asc") String sortDir,
+        @RequestParam(defaultValue = "0") int page,
+        Model model
+    ) {
         Page<Course> result = courseService.search(
-                nameKeyword, teacherKeyword, sortField, sortDir, page);
+            nameKeyword,
+            teacherKeyword,
+            sortField,
+            sortDir,
+            page
+        );
         Sort.Order appliedOrder = result.getSort().iterator().next();
         model.addAttribute("courses", result.getContent());
         model.addAttribute("currentPage", result.getNumber());
@@ -51,8 +59,11 @@ public class CourseController {
     }
 
     @PostMapping("/courses")
-    public String createCourse(@Valid @ModelAttribute("course") Course course,
-                               BindingResult errors, Model model) {
+    public String createCourse(
+        @Valid @ModelAttribute("course") Course course,
+        BindingResult errors,
+        Model model
+    ) {
         if (errors.hasErrors()) {
             model.addAttribute("editing", false);
             return "course-form";
@@ -83,9 +94,12 @@ public class CourseController {
     }
 
     @PostMapping("/courses/{id}/edit")
-    public String updateCourse(@PathVariable Long id,
-                               @Valid @ModelAttribute("course") Course course,
-                               BindingResult errors, Model model) {
+    public String updateCourse(
+        @PathVariable Long id,
+        @Valid @ModelAttribute("course") Course course,
+        BindingResult errors,
+        Model model
+    ) {
         if (errors.hasErrors()) {
             course.setId(id); // Keep the edit form action valid after validation errors.
             model.addAttribute("editing", true);

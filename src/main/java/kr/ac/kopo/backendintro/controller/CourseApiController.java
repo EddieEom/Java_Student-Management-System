@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/courses")
 public class CourseApiController {
+
     private final CourseService courseService;
 
     public CourseApiController(CourseService courseService) {
@@ -35,13 +36,19 @@ public class CourseApiController {
      */
     @GetMapping
     public ResponseEntity<Page<Course>> courses(
-            @RequestParam(required = false) String nameKeyword,
-            @RequestParam(required = false) String teacherKeyword,
-            @RequestParam(defaultValue = "id") String sortField,
-            @RequestParam(defaultValue = "asc") String sortDir,
-            @RequestParam(defaultValue = "0") int page) {
+        @RequestParam(required = false) String nameKeyword,
+        @RequestParam(required = false) String teacherKeyword,
+        @RequestParam(defaultValue = "id") String sortField,
+        @RequestParam(defaultValue = "asc") String sortDir,
+        @RequestParam(defaultValue = "0") int page
+    ) {
         Page<Course> result = courseService.search(
-                nameKeyword, teacherKeyword, sortField, sortDir, page);
+            nameKeyword,
+            teacherKeyword,
+            sortField,
+            sortDir,
+            page
+        );
         return ResponseEntity.ok(result);
     }
 
@@ -64,8 +71,9 @@ public class CourseApiController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(
-            @PathVariable Long id,
-            @Valid @RequestBody Course course) {
+        @PathVariable Long id,
+        @Valid @RequestBody Course course
+    ) {
         // The existing transactional CourseService uses dirty checking (no save call).
         Course updatedCourse = courseService.update(id, course);
         if (updatedCourse == null) {

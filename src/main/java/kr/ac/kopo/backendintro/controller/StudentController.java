@@ -1,35 +1,31 @@
 package kr.ac.kopo.backendintro.controller;
+
+import jakarta.validation.Valid;
 import kr.ac.kopo.backendintro.model.Student;
 import kr.ac.kopo.backendintro.service.StudentService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
-
-import org.springframework.data.domain.Page;
-
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class StudentController {
 
     private final StudentService studentService;
-    public StudentController(StudentService studentService) {
 
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
-
 
     @GetMapping("/student-form")
     public String studentForm(Model model) {
         model.addAttribute("student", new Student());
         return "student-form";
     }
+
     @PostMapping("/student")
-    public String student(
-            @Valid @ModelAttribute Student student,
-            BindingResult bindingResult) {
+    public String student(@Valid @ModelAttribute Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "student-form";
         }
@@ -39,16 +35,22 @@ public class StudentController {
 
     @GetMapping("/students")
     public String students(
-            @RequestParam(required = false) String nameKeyword,
-            @RequestParam(required = false) String majorKeyword,
-            @RequestParam(defaultValue = "id") String sortField, // ★ 추가
-            @RequestParam(defaultValue = "asc") String sortDir, // ★ 추가
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            Model model) {
+        @RequestParam(required = false) String nameKeyword,
+        @RequestParam(required = false) String majorKeyword,
+        @RequestParam(defaultValue = "id") String sortField, // ★ 추가
+        @RequestParam(defaultValue = "asc") String sortDir, // ★ 추가
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        Model model
+    ) {
         Page<Student> studentPage = studentService.search(
-                nameKeyword, majorKeyword,
-                sortField, sortDir, page, size);
+            nameKeyword,
+            majorKeyword,
+            sortField,
+            sortDir,
+            page,
+            size
+        );
         model.addAttribute("students", studentPage.getContent());
         model.addAttribute("currentPage", studentPage.getNumber());
         model.addAttribute("totalPages", studentPage.getTotalPages());
@@ -63,9 +65,7 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public String studentDetail(
-            @PathVariable Long id,
-            Model model) {
+    public String studentDetail(@PathVariable Long id, Model model) {
         Student student = studentService.findById(id); // ★ Service 호출로 변경
         if (student == null) {
             return "redirect:/students";
@@ -75,10 +75,7 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}/edit")
-    public String studentEditForm(
-            @PathVariable Long id,
-            Model model) {
-
+    public String studentEditForm(@PathVariable Long id, Model model) {
         Student student = studentService.findById(id);
 
         if (student == null) {
@@ -91,9 +88,10 @@ public class StudentController {
 
     @PostMapping("/students/{id}/edit")
     public String studentEdit(
-            @PathVariable Long id,
-            @Valid @ModelAttribute Student student,
-            BindingResult bindingResult) {
+        @PathVariable Long id,
+        @Valid @ModelAttribute Student student,
+        BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors()) {
             student.setId(id); // 화면 재표시용 — th:action 에 필요
             return "student-edit";
@@ -107,5 +105,4 @@ public class StudentController {
         studentService.deleteById(id);
         return "redirect:/students";
     }
-
 }

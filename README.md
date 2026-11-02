@@ -50,6 +50,7 @@ SQL Server 연결 중 로그인 이름이 `${DB_USERNAME}` 그대로 전달되�
 - [HTTP 스모크 32건 기록](docs/week10-http-smoke-results.json): 인메모리 Repository를 사용한 HTTP 검증
 - SQL Server 기능별 동작은 로컬에서 확인했으며 위 HTTP 기록과 구분합니다.
 - [실습 요구사항 정리](docs/week10-requirements.md)
+- [7~10주차 PDF 전체 대조 및 코드 정리](docs/pdf-requirements-review.md)
 
 ## 실행 방법
 

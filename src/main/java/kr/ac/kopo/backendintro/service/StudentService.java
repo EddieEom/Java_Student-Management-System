@@ -1,25 +1,26 @@
 package kr.ac.kopo.backendintro.service;
-import kr.ac.kopo.backendintro.model.Student;
-import kr.ac.kopo.backendintro.repository.StudentRepository;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // ★ 추가
 
 import java.util.List;
+import kr.ac.kopo.backendintro.model.Student;
+import kr.ac.kopo.backendintro.repository.StudentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // ★ 추가
 
 // 의존성 주입(DI). 필요한 객체를 직접 new 로 만들지 않고 외부(Spring)에서 전달받음.
 
 @Transactional // ★ 추가 — 클래스의 모든 메서드에 트랜잭션 적용
 @Service
 public class StudentService {
+
     private final StudentRepository studentRepository;
+
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
-
 
     public Student save(Student student) {
         return studentRepository.save(student);
@@ -28,17 +29,17 @@ public class StudentService {
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
+
     public Student findById(Long id) {
-        return studentRepository.findById(id)
-                .orElse(null);
+        return studentRepository.findById(id).orElse(null);
     }
+
     public void deleteById(Long id) {
         studentRepository.deleteById(id);
     }
 
     public Student update(Long id, Student updatedStudent) {
-        Student student = studentRepository.findById(id)
-                .orElse(null);
+        Student student = studentRepository.findById(id).orElse(null);
         if (student == null) {
             return null;
         }
@@ -48,15 +49,16 @@ public class StudentService {
         return student;
     }
 
-    public Page<Student> search(String nameKeyword,
-                                String majorKeyword,
-                                String sortField, // ★ 추가
-                                String sortDir, int page, int size) {
-
-        boolean nameEmpty =
-                nameKeyword == null || nameKeyword.isBlank();
-        boolean majorEmpty =
-                majorKeyword == null || majorKeyword.isBlank();
+    public Page<Student> search(
+        String nameKeyword,
+        String majorKeyword,
+        String sortField, // ★ 추가
+        String sortDir,
+        int page,
+        int size
+    ) {
+        boolean nameEmpty = nameKeyword == null || nameKeyword.isBlank();
+        boolean majorEmpty = majorKeyword == null || majorKeyword.isBlank();
         String field; // ★ 여기부터 추가
         if ("name".equals(sortField)) {
             field = "name";
@@ -79,18 +81,15 @@ public class StudentService {
             return studentRepository.findAll(pageable);
         }
         if (!nameEmpty && majorEmpty) {
-            return studentRepository.findByNameContaining(
-                    nameKeyword, pageable);
-
+            return studentRepository.findByNameContaining(nameKeyword, pageable);
         }
         if (nameEmpty) {
-            return studentRepository.findByMajorContaining(
-                    majorKeyword, pageable);
-
+            return studentRepository.findByMajorContaining(majorKeyword, pageable);
         }
-        return studentRepository
-                .findByNameContainingAndMajorContaining(
-                        nameKeyword, majorKeyword, pageable);
-
+        return studentRepository.findByNameContainingAndMajorContaining(
+            nameKeyword,
+            majorKeyword,
+            pageable
+        );
     }
 }
