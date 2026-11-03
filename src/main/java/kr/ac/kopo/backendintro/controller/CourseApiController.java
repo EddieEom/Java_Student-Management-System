@@ -1,5 +1,6 @@
 package kr.ac.kopo.backendintro.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ac.kopo.backendintro.model.Course;
 import kr.ac.kopo.backendintro.service.CourseService;
@@ -15,11 +16,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * JSON presentation layer for the existing CourseService.
  * Shares the same data and business rules with the Thymeleaf CourseController.
  */
+
+@Tag(
+    name = "과목 관리 API",
+    description = "과목 조회, 등록, 수정, 삭제 및 검색 API"
+)
 @RestController
 @RequestMapping("/api/courses")
 public class CourseApiController {
@@ -30,10 +37,6 @@ public class CourseApiController {
         this.courseService = courseService;
     }
 
-    /**
-     * CourseService from the previous lab fixes the page size at five.
-     * The API intentionally retains that service contract unchanged.
-     */
     @GetMapping
     public ResponseEntity<Page<Course>> courses(
         @RequestParam(required = false) String nameKeyword,
