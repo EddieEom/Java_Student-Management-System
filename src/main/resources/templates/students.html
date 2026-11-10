@@ -955,6 +955,9 @@
                         <div>
                             <p class="eyebrow">STUDENT MANAGEMENT</p>
                             <h1>학생 목록</h1>
+                            <form th:action="@{/logout}" method="post">
+                                <button class="btn" type="submit">로그아웃</button>
+                            </form>
                             <p class="subtitle">학생 정보를 한눈에 확인하고 간편하게 관리하세요.</p>
                         </div>
                         <a class="btn primary" href="student-form.html" th:href="@{/student-form}">

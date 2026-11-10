@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>로그아웃 완료</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: grid;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px;
+                place-items: center;
+                background: #f5f7fb;
+                color: #192744;
+                font: 16px/1.6 "Malgun Gothic", system-ui, sans-serif;
+            }
+
+            main {
+                width: min(100%, 26rem);
+                padding: clamp(24px, 6vw, 40px);
+                border: 1px solid #e1e6ef;
+                border-radius: 16px;
+                background: white;
+            }
+
+            h1 {
+                margin: 0;
+                font-size: 1.65rem;
+            }
+
+            a {
+                color: #294cc5;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1>로그아웃되었습니다.</h1>
+            <p>다시 이용하시려면 로그인해 주세요.</p>
+            <a th:href="@{/login}">다시 로그인</a>
+        </main>
+    </body>
+</html>
